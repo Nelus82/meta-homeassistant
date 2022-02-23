@@ -1,0 +1,27 @@
+{ "name":"Home Assistant",
+  "manufacturer":"Home assistant",
+  "type":"LIGHT",
+  "version":1,
+  "persistedvariables":{
+    "HABearer":"Bearerfromhomeassistant",
+    "ToInitiate":true
+  },
+  "discover":{
+    "welcomeheadertext":"Choose your Home Assistant server",
+    "welcomedescription":"powered by meta v2 \n by JAC459 \n X \n Driver Development \n by Nelus & MarkusM",
+    "command":{"type":"mDNS", "command":"", "queryresult":["$.[?(@.mac&&@.ip&&@.short)][?(@property === 'name' && @.match(/home-assistant/i))]^"]}
+  },
+  "template" : {
+    "name":"Home Assistant",
+    "dynamicname":   "DYNAMIK_INST_START DYNAMIK let haname = JSON.parse(\"$Result\").name; haname.split('._tcp.loc')[0].replace(\/-\/g,\" \").replace(\/._\/g,\"-\"); DYNAMIK_INST_END", 
+    "dynamicid":     "DYNAMIK_INST_START DYNAMIK JSON.parse(\"$Result\").ip DYNAMIK_INST_END",
+    "variables":{
+    "HA_IP":  "DYNAMIK_INST_START DYNAMIK JSON.parse(\"$Result\").ip DYNAMIK_INST_END",
+    "HA_PORT":  "DYNAMIK_INST_START DYNAMIK JSON.parse(\"$Result\").port DYNAMIK_INST_END",
+    "HA_Bearer": "$HABearer"
+    },
+    "buttons":{
+      "Light1":   {"label":"", "type":"http-rest", "command": "{\"verb\": \"post\", \"call\": \"http://$HA_IP:$HA_PORT/api/services/light/toggle\", \"headers\": {\"Authorization\": \"Bearer $HA_Bearer\"}, \"message\": {\"entity_id\": \"light.tweedeverdieping_spotjes\"} }"}
+    }     
+  }
+}
